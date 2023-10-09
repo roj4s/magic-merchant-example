@@ -6,11 +6,14 @@ services:
       context: ./backend
     container_name: magicmerchant-backend
     environment:
-      - MAGIC_API_KEY=<key>
+      - MAGIC_API_KEY=f00d0934--wa7M-pDSHGW5bHg_LM3srn1GRbnZMmJE1OQZ6RcAaIuvuLxbShcm9-6vt7me_6kZyVYmBemdK590lQfwBQSl3JE4U-9Vg
+      - MAGIC_URL=http://172.15.150.3:4004
     volumes:
       - ./backend:/app
     ports:
       - "4005:4005"
+    networks:
+      - magic_merchant_net
 
   magicmerchant-frontend:
     build:
@@ -23,6 +26,8 @@ services:
       - ./frontend:/frontend
     depends_on:
       - magicmerchant-backend
+    networks:
+      - magic_merchant_net
 
 networks:
   magic_merchant_net:
