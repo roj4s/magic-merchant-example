@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  magicmerchant-backend:
+    build:
+      context: ./backend
+    container_name: magicmerchant-backend
+    environment:
+      - MAGIC_API_KEY=<key>
+    volumes:
+      - ./backend:/app
+    ports:
+      - "4005:4005"
+
+  magicmerchant-frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3002:3000"
+    container_name: magicmerchant-frontend
+    stdin_open: true
+    volumes:
+      - ./frontend:/frontend
+    depends_on:
+      - magicmerchant-backend
+
+networks:
+  magic_merchant_net:
+    external:
+      name: "magic_merchant_net"
