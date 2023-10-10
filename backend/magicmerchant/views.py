@@ -7,13 +7,13 @@ import json
 
 
 class CheckoutAPI(APIView):
-    def get(self, req):
-        data = json.load(open(f"{os.path.dirname(__file__)}/data.json", "rt"))
+    def post(self, req):
         magic_api_url = os.environ["MAGIC_URL"]
         magic_key = os.environ["MAGIC_API_KEY"]
         checkout_url = f"{magic_api_url}/api/merchants/checkout"
+        print(req.data)
         checkout_resp = requests.post(
-            checkout_url, json=data, headers={"api-key": magic_key}
+            checkout_url, json=req.data, headers={"api-key": magic_key}
         )
         if checkout_resp.status_code in (200, 201):
             checkout_data = checkout_resp.json()
