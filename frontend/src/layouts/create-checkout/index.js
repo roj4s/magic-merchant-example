@@ -43,21 +43,33 @@ export default function CheckoutLayout() {
   };
   const onSuccess = (data) => {
     console.log("Success: ", data);
-    /* call process payment api of Magic and send response
-       in given format to function sendEventToChild.
-       format of success resonse. */
     let response = {
-      type: "SUCCESS_RESPONSE",
-      message: "successful",
-    };
-    // format of error resonse.
-    //
-    response = {
       type: "ERROR_RESPONSE",
-      message: "error message",
+      message: "Unknown",
     };
 
-    sendEventToChild(response);
+    axios
+      .get(
+        `${env.API_URL}/complete_checkout/${magicCheckoutData["checkout_id"]}`
+      )
+      .then((resp) => {
+        if (resp.status === 200 || resp.status === 201) {
+          response = {
+            type: "SUCCESS_RESPONSE",
+            message: "successful",
+          };
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        response = {
+          type: "ERROR_RESPONSE",
+          message: err.message,
+        };
+      })
+      .finally(() => {
+        sendEventToChild(response);
+      });
   };
 
   return (
