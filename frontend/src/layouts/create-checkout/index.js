@@ -55,7 +55,12 @@ export default function CheckoutLayout() {
       .then((resp) => {
         if (resp.status === 200 || resp.status === 201) {
           response = {
-            type: "SUCCESS_RESPONSE",
+            /*PAYMENT_METHOD_ATTACHED: {
+              type: "PAYMENT_METHOD_ATTACHED",
+              message: "Payment method has been attached successfully.",
+            },*/
+            //type: "SUCCESS_RESPONSE",
+            type: "PAYMENT_METHOD_ATTACHED",
             message: "successful",
           };
         }
@@ -68,6 +73,7 @@ export default function CheckoutLayout() {
         };
       })
       .finally(() => {
+        console.log("Finally called");
         sendEventToChild(response);
       });
   };
@@ -110,7 +116,7 @@ export default function CheckoutLayout() {
             checkoutId={magicCheckoutData.checkout_id}
             linkToken={magicCheckoutData.link_token}
             onSuccess={onSuccess}
-            onError={onError}
+            OnError={onError}
             isSandbox
           />
         </Box>

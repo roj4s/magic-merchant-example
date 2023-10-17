@@ -6,8 +6,9 @@ services:
       context: ./backend
     container_name: magicmerchant-backend
     environment:
-      - MAGIC_API_KEY=f00d0934--wa7M-pDSHGW5bHg_LM3srn1GRbnZMmJE1OQZ6RcAaIuvuLxbShcm9-6vt7me_6kZyVYmBemdK590lQfwBQSl3JE4U-9Vg
-      - MAGIC_URL=http://172.15.150.3:4004
+      #- MAGIC_API_KEY=f00d0934--wa7M-pDSHGW5bHg_LM3srn1GRbnZMmJE1OQZ6RcAaIuvuLxbShcm9-6vt7me_6kZyVYmBemdK590lQfwBQSl3JE4U-9Vg
+      - MAGIC_API_KEY=f2d0761c-elNiI4dRkEtZ_5vRWsixgBfNdmLTHvib31QV3gavlozLv_zKREZGgzk3-j4eFUuJiTk0cxBAKyqnXNEWew1bOTZyL_YJDA
+      - MAGIC_URL=https://api-sandbox.join-magic.com
     volumes:
       - ./backend:/app
     ports:
@@ -19,7 +20,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "3002:3000"
+      - "3003:3000"
     container_name: magicmerchant-frontend
     stdin_open: true
     volumes:

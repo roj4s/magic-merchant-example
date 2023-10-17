@@ -1,7 +1,7 @@
 window.env = {
   "npm_config_user_agent": "npm/8.19.4 node/v16.20.1 linux x64 workspaces/false",
   "NODE_VERSION": "16.20.1",
-  "HOSTNAME": "e1e42f962838",
+  "HOSTNAME": "64b42d63f8b9",
   "YARN_VERSION": "1.22.19",
   "npm_node_execpath": "/usr/local/bin/node",
   "SHLVL": "2",
