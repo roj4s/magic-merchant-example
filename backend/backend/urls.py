@@ -16,12 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rest_framework import routers
 from django.urls import include, path
 from magicmerchant.views import CheckoutAPI, CompleteCheckoutAPI
 
 urlpatterns = [
-    path("api/complete_checkout/:checkout_id", CompleteCheckoutAPI.as_view()),
+    path("api/complete_checkout/<str:checkout_id>/", CompleteCheckoutAPI.as_view()),
     path("api/checkout", CheckoutAPI.as_view()),
     path("admin/", admin.site.urls),
 ]

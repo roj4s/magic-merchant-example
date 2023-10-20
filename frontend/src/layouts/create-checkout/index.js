@@ -4,7 +4,7 @@ import "@magicpay/magicpay-js";
 import { sendEventToChild } from "@magicpay/magicpay-js";
 import env from "react-dotenv";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 
 export default function CheckoutLayout() {
@@ -13,6 +13,8 @@ export default function CheckoutLayout() {
   const [apiError, setApiError] = useState(null);
   const [invalidJson, setInvalidJson] = useState(true);
   const url = `${env.API_URL}/api/checkout`;
+
+  const myRef = useRef(null);
 
   useEffect(() => {
     if (!invalidJson)
@@ -41,42 +43,47 @@ export default function CheckoutLayout() {
   const onError = (data) => {
     console.log("Error Occured: ", data);
   };
-  const onSuccess = (data) => {
-    console.log("Success: ", data);
-    let response = {
-      type: "ERROR_RESPONSE",
-      message: "Unknown",
-    };
+  const onSuccess = useCallback(
+    (data) => {
+      console.log("Success: ", data);
+      let response = {
+        type: "ERROR_RESPONSE",
+        message: "Unknown",
+      };
 
-    axios
-      .get(
-        `${env.API_URL}/complete_checkout/${magicCheckoutData["checkout_id"]}`
-      )
-      .then((resp) => {
-        if (resp.status === 200 || resp.status === 201) {
+      axios
+        .get(
+          `${env.API_URL}/api/complete_checkout/${magicCheckoutData["checkout_id"]}/`
+        )
+        .then((resp) => {
+          if (resp.status === 200 || resp.status === 201) {
+            response = {
+              type: "SUCCESS_RESPONSE",
+              message: "successful",
+            };
+          }
+        })
+        .catch((err) => {
+          console.log(err);
           response = {
-            /*PAYMENT_METHOD_ATTACHED: {
-              type: "PAYMENT_METHOD_ATTACHED",
-              message: "Payment method has been attached successfully.",
-            },*/
-            //type: "SUCCESS_RESPONSE",
-            type: "PAYMENT_METHOD_ATTACHED",
-            message: "successful",
+            type: "ERROR_RESPONSE",
+            message: err.message,
           };
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        response = {
-          type: "ERROR_RESPONSE",
-          message: err.message,
-        };
-      })
-      .finally(() => {
-        console.log("Finally called");
-        sendEventToChild(response);
-      });
-  };
+        })
+        .finally(() => {
+          sendEventToChild(response);
+        });
+    },
+    [magicCheckoutData]
+  );
+
+  useEffect(() => {
+    const element = myRef.current;
+    if (element) {
+      element.onSuccess = onSuccess;
+      element.onError = onError;
+    }
+  }, [magicCheckoutData, onSuccess]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -117,6 +124,7 @@ export default function CheckoutLayout() {
             linkToken={magicCheckoutData.link_token}
             onSuccess={onSuccess}
             OnError={onError}
+            ref={myRef}
             isSandbox
           />
         </Box>

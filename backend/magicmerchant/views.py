@@ -30,10 +30,9 @@ class CheckoutAPI(APIView):
 
 
 class CompleteCheckoutAPI(APIView):
-    def get(self, req):
+    def get(self, req, checkout_id):
         magic_api_url = os.environ["MAGIC_URL"]
         magic_key = os.environ["MAGIC_API_KEY"]
-        checkout_id = req.params.checkout_id
         checkout_url = (
             f"{magic_api_url}/api/merchants/payment_preprocess/get_processor_token/"
         )
