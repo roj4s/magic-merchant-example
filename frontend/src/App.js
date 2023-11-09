@@ -1,14 +1,31 @@
-import logo from "./logo.svg";
 import "./App.css";
-import CheckoutLayout from "./layouts/create-checkout";
+import { Routes, Route, Navigate } from "react-router-dom";
+import routes from "./routes";
+
+const getRoutes = (allRoutes) =>
+  allRoutes.map((route) => {
+    if (route.route) {
+      return (
+        <Route
+          exact
+          path={route.route}
+          element={route.component}
+          key={route.key}
+        />
+      );
+    }
+
+    return null;
+  });
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <CheckoutLayout />
-      </header>
-    </div>
+    <>
+      <Routes>
+        {getRoutes(routes)}
+        <Route path="*" element={<Navigate to="/home" />} />
+      </Routes>
+    </>
   );
 }
 

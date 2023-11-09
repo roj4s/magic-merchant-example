@@ -14,7 +14,7 @@ class CheckoutAPI(APIView):
         checkout_resp = requests.post(
             checkout_url, json=req.data, headers={"api-key": magic_key}
         )
-        print(checkout_resp)
+        print(checkout_resp.json())
         if checkout_resp.status_code in (200, 201):
             checkout_data = checkout_resp.json()
             checkout_id = checkout_data["id"]

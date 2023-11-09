@@ -1,7 +1,7 @@
 window.env = {
   "npm_config_user_agent": "npm/8.19.4 node/v16.20.1 linux x64 workspaces/false",
   "NODE_VERSION": "16.20.1",
-  "HOSTNAME": "d0588a8540a2",
+  "HOSTNAME": "7ae6fbe0804c",
   "YARN_VERSION": "1.22.19",
   "npm_node_execpath": "/usr/local/bin/node",
   "SHLVL": "2",
@@ -29,5 +29,6 @@ window.env = {
   "npm_command": "start",
   "INIT_CWD": "/frontend",
   "EDITOR": "vi",
-  "API_URL": "http://localhost:4005"
+  "API_URL": "http://localhost:4005",
+  "MERCHANTS_CHECKOUT_ID": "4b718371-a466-4270-bc97-ece09d256443"
 };
