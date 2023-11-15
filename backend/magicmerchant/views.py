@@ -3,13 +3,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
 import requests
+from .models import Order
 
 
 class CheckoutAPI(APIView):
     def post(self, req):
-        magic_api_url = os.environ["MAGIC_URL"]
-        magic_key = os.environ["MAGIC_API_KEY"]
-        print(magic_api_url)
+        isSandbox = bool(req.data["isSandbox"])
+        magic_api_url = os.environ["MAGIC_URL"] if isSandbox else os.environ["MAGIC_URL_PROD"]
+        magic_key = os.environ["MAGIC_API_KEY"] if isSandbox else os.environ["MAGIC_API_KEY_PROD"]
+        print("magic_url", magic_api_url)
+        print("isSandbox", isSandbox)
         checkout_url = f"{magic_api_url}/api/merchants/checkout"
         checkout_resp = requests.post(
             checkout_url, json=req.data, headers={"api-key": magic_key}
@@ -30,19 +33,29 @@ class CheckoutAPI(APIView):
 
 
 class CompleteCheckoutAPI(APIView):
-    def get(self, req, checkout_id):
-        magic_api_url = os.environ["MAGIC_URL"]
-        magic_key = os.environ["MAGIC_API_KEY"]
+    def get(self, req, checkout_id, link_token, isSandbox):
+        magic_key = os.environ["MAGIC_API_KEY"] if bool(isSandbox) else os.environ["MAGIC_API_KEY_PROD"]
+        magic_api_url = os.environ["MAGIC_URL"] if bool(isSandbox) else os.environ["MAGIC_URL_PROD"]
+        print("Checkout id", checkout_id)
+        print("Link token", link_token)
         checkout_url = (
             f"{magic_api_url}/api/merchants/payment_preprocess/get_processor_token/"
         )
         checkout_resp = requests.post(
             checkout_url,
-            json={checkout_id: checkout_id},
+            json={"checkout_id": checkout_id},
             headers={"api-key": magic_key},
         )
 
         checkout_data = checkout_resp.json()
+        """
+        Order(
+            checkout_id=checkout_id,
+            link_token=link_token,
+            transaction_id=checkout_data["transaction_id"],
+        ).save()
+        """
+        print(checkout_data)
         resp = JsonResponse(checkout_data)
         if checkout_resp.status_code not in (200, 201):
             resp.status_code = 400

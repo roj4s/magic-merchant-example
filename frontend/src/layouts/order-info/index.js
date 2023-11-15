@@ -1,10 +1,12 @@
 import {
   Box,
+  CircularProgress,
   FormControl,
   FormHelperText,
   FormLabel,
   Input,
   Stack,
+  Switch,
   Typography,
 } from "@mui/joy";
 import { useSelector, useDispatch } from "react-redux";
@@ -37,6 +39,8 @@ export default function OrderInfo() {
     return { phone: null, address: null, name: null };
   }, []);
   const [fieldsErrorMap, setFieldsErrorMap] = useState(initialErrorMap);
+  const [loading, setLoading] = useState(false);
+  const [sandbox, setIsSandbox] = useState(false);
 
   const nav = useNavigate();
 
@@ -58,7 +62,7 @@ export default function OrderInfo() {
 
       axios
         .get(
-          `${env.API_URL}/api/complete_checkout/${magicCheckoutData["checkout_id"]}/`
+          `${env.API_URL}/api/complete_checkout/${magicCheckoutData["checkout_id"]}/${magicCheckoutData["link_token"]}/${sandbox}`
         )
         .then((resp) => {
           if (resp.status === 200 || resp.status === 201) {
@@ -81,7 +85,7 @@ export default function OrderInfo() {
           setTimeout(() => nav("/"), 500);
         });
     },
-    [magicCheckoutData, disp, nav]
+    [magicCheckoutData, disp, nav, sandbox]
   );
 
   const getCheckoutParams = useCallback(() => {
@@ -91,8 +95,10 @@ export default function OrderInfo() {
       env.MERCHANTS_CHECKOUT_ID
     );
 
+    setLoading(true);
+
     axios
-      .post(checkoutUrl, data)
+      .post(checkoutUrl, { ...data, isSandbox: sandbox })
       .then((resp) => {
         if (resp.status === 200) {
           setMagicCheckoutData(resp.data);
@@ -116,7 +122,8 @@ export default function OrderInfo() {
             };
           });
         }
-      });
+      })
+      .finally(() => setLoading(false));
   }, [checkoutUrl, initialErrorMap, orderData, userData]);
 
   const validUserData = useCallback(() => {
@@ -199,6 +206,10 @@ export default function OrderInfo() {
               gap: 4,
             }}
           >
+            <Switch
+              checked={sandbox}
+              onChange={(event) => setIsSandbox(event.target.checked)}
+            />
             <Box
               sx={{
                 gap: 2,
@@ -291,17 +302,24 @@ export default function OrderInfo() {
             }}
           >
             <Typography level="h4">Pay with Bank</Typography>
-            {magicCheckoutData ? (
+            {!loading && magicCheckoutData && (
               <magic-link
                 checkoutId={magicCheckoutData.checkout_id}
                 linkToken={magicCheckoutData.link_token}
                 onSuccess={onSuccess}
                 OnError={onError}
                 ref={myRef}
-                isSandbox
+                isSandbox={sandbox}
               />
-            ) : (
+            )}
+
+            {!loading && !magicCheckoutData && (
               <magic-btn onClick={fakeMagicBtnClick} />
+            )}
+            {loading && (
+              <Box sx={{ mx: "auto", my: "auto" }}>
+                <CircularProgress />
+              </Box>
             )}
           </Box>
         </Box>

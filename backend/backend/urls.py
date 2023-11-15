@@ -20,7 +20,10 @@ from django.urls import include, path
 from magicmerchant.views import CheckoutAPI, CompleteCheckoutAPI
 
 urlpatterns = [
-    path("api/complete_checkout/<str:checkout_id>/", CompleteCheckoutAPI.as_view()),
+    path(
+        "api/complete_checkout/<str:checkout_id>/<str:link_token>/<str:isSandbox>",
+        CompleteCheckoutAPI.as_view(),
+    ),
     path("api/checkout", CheckoutAPI.as_view()),
     path("admin/", admin.site.urls),
 ]

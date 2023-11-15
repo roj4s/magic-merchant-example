@@ -1,18 +1,38 @@
 version: "3"
 
 services:
+  magicmerchant-db:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DBNAME: postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - magic_merchant_net
+
   magicmerchant-backend:
     build:
       context: ./backend
     container_name: magicmerchant-backend
     environment:
       #- MAGIC_API_KEY=f00d0934--wa7M-pDSHGW5bHg_LM3srn1GRbnZMmJE1OQZ6RcAaIuvuLxbShcm9-6vt7me_6kZyVYmBemdK590lQfwBQSl3JE4U-9Vg
-      - MAGIC_API_KEY=f2d0761c-elNiI4dRkEtZ_5vRWsixgBfNdmLTHvib31QV3gavlozLv_zKREZGgzk3-j4eFUuJiTk0cxBAKyqnXNEWew1bOTZyL_YJDA
+      #- MAGIC_API_KEY=f2d0761c-elNiI4dRkEtZ_5vRWsixgBfNdmLTHvib31QV3gavlozLv_zKREZGgzk3-j4eFUuJiTk0cxBAKyqnXNEWew1bOTZyL_YJDA
+      - MAGIC_API_KEY=12ee6298-AB_tZYdYBdwpsb4cRVRH9ShDbMbwvPiyhX94p6nH6TnkXYvNUY9RuaFRmXAtPrsBTPh6Vj0y3bjCSuWkgprFeJyrvwQ1Zw
+      - MAGIC_API_KEY_PROD=3352f362-hS0mnvKo3SgnORUdyjwAqqNbj_Awb4wQ-3mQs1x2FVnInZoSeqYXh9cDroaPGvQxhb2qZnGDhxUBl89cqeDmNxNy9TFbqw
       - MAGIC_URL=https://api-sandbox.join-magic.com
+      - MAGIC_URL_PROD=https://api.join-magic.com
+      - DATABASE_NAME=postgres
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=pass
+      - DATABASE_HOST=magicmerchant-db
+      - DATABASE_PORT=5432
     volumes:
       - ./backend:/app
     ports:
       - "4005:4005"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:4005"
     networks:
       - magic_merchant_net
 

@@ -15,4 +15,4 @@ COPY . .
 
 EXPOSE 4005
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:4005"]
+CMD ["python", "manage.py", "migrate", "&&", "python",  "runserver", "0.0.0.0:4005"]

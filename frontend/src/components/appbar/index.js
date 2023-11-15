@@ -9,7 +9,6 @@ export default function AppBar({ title, linkTo }) {
         top: 0,
         zIndex: 10,
         boxShadow: 15,
-        //maxWidth: "100vw",
         p: 3,
         display: "flex",
         alignItems: "center",
