@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
 import requests
-from .models import Order
+from magicmerchant.models import Order
 
 
 class CheckoutAPI(APIView):

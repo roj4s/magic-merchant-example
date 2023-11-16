@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include, path
-from magicmerchant.views import CheckoutAPI, CompleteCheckoutAPI
+from magicmerchant.views.checkout import CheckoutAPI, CompleteCheckoutAPI
+from magicmerchant.views.user_verification import SendOTPCodeView, VerifyOTPCodeView
 
 urlpatterns = [
     path(
@@ -25,5 +26,7 @@ urlpatterns = [
         CompleteCheckoutAPI.as_view(),
     ),
     path("api/checkout", CheckoutAPI.as_view()),
+    path("api/send_code/<str:phone>", SendOTPCodeView.as_view()),
+    path("api/verify_code/<str:phone>/<str:otp>", VerifyOTPCodeView.as_view()),
     path("admin/", admin.site.urls),
 ]
