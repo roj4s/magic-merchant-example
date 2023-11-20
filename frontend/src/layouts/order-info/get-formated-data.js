@@ -10,7 +10,7 @@ export default function get_formated_data(
   const items = Object.keys(orderData.products).map((prodId) => {
     const p = orderData.products[prodId];
     return {
-      price: { amount: p.price, currency: "USD" },
+      price: { amount: 1.0, currency: "USD" },
       name: p.name,
       sku: faker.commerce.isbn(),
       image: p.image,

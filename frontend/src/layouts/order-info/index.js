@@ -124,7 +124,7 @@ export default function OrderInfo() {
         }
       })
       .finally(() => setLoading(false));
-  }, [checkoutUrl, initialErrorMap, orderData, userData]);
+  }, [checkoutUrl, initialErrorMap, orderData, userData, sandbox]);
 
   const validUserData = useCallback(() => {
     return (
@@ -302,14 +302,24 @@ export default function OrderInfo() {
             }}
           >
             <Typography level="h4">Pay with Bank</Typography>
-            {!loading && magicCheckoutData && (
+            {!loading && magicCheckoutData && sandbox && (
               <magic-link
                 checkoutId={magicCheckoutData.checkout_id}
                 linkToken={magicCheckoutData.link_token}
                 onSuccess={onSuccess}
                 OnError={onError}
                 ref={myRef}
-                isSandbox={sandbox}
+                isSandbox
+              />
+            )}
+
+            {!loading && magicCheckoutData && !sandbox && (
+              <magic-link
+                checkoutId={magicCheckoutData.checkout_id}
+                linkToken={magicCheckoutData.link_token}
+                onSuccess={onSuccess}
+                OnError={onError}
+                ref={myRef}
               />
             )}
 

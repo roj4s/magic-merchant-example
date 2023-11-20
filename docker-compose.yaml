@@ -32,6 +32,8 @@ services:
       - ./backend:/app
     ports:
       - "4005:4005"
+    depends_on:
+      - magicmerchant-db
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:4005"
     networks:
       - magic_merchant_net

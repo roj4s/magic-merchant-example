@@ -24,11 +24,14 @@ export const orderSlice = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action) => {
-      state.orders[state.activeOrder].products[action.payload._id] =
-        action.payload;
+      state.orders[state.activeOrder].products[action.payload._id] = {
+        ...action.payload,
+        price: 1.0,
+      };
 
-      state.orders[state.activeOrder].total +=
-        action.payload.quantity * action.payload.price;
+      /*state.orders[state.activeOrder].total +=
+        action.payload.quantity * action.payload.price; */
+      state.orders[state.activeOrder].total = 1.0;
 
       if (
         action.payload.quantity === 0 &&
