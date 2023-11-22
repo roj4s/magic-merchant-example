@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include, path
 from magicmerchant.views.checkout import CheckoutAPI, CompleteCheckoutAPI
+from magicmerchant.views.refund import GetPurchasesListView, InitiateRefundView, ListRefundsView, RefundStatusView, RequestRefundView
 from magicmerchant.views.user_verification import SendOTPCodeView, VerifyOTPCodeView
 
 urlpatterns = [
@@ -28,5 +29,10 @@ urlpatterns = [
     path("api/checkout", CheckoutAPI.as_view()),
     path("api/send_code/<str:phone>", SendOTPCodeView.as_view()),
     path("api/verify_code/<str:phone>/<str:otp>", VerifyOTPCodeView.as_view()),
+    path("api/purchases/<str:auth_token>", GetPurchasesListView.as_view()),
+    path("api/refund/<str:auth_token>/<str:transaction_uuid>", RequestRefundView.as_view()),
+    path("api/listrefunds/<str:auth_token>", ListRefundsView.as_view()),
+    path("api/setrefundstatus", RefundStatusView.as_view()),
+    path("api/initiaterefund", InitiateRefundView.as_view()),
     path("admin/", admin.site.urls),
 ]

@@ -1,5 +1,6 @@
 import Home from "./layouts/home";
 import OrderInfo from "./layouts/order-info";
+import Refund from "./layouts/refund";
 import VerifyUserPage from "./layouts/verify_user";
 
 const routes = [
@@ -20,6 +21,12 @@ const routes = [
     key: "verify_user",
     route: "/verify-user",
     component: <VerifyUserPage />,
+  },
+  {
+    name: "Refund",
+    key: "refund",
+    route: "/refund",
+    component: <Refund />,
   },
 ];
 
